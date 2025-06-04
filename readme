@@ -1,0 +1,49 @@
+```
+# go.mod (create this file in the api-gateway directory)
+module api-gateway
+
+go 1.21 # Or your Go version
+
+```
+
+**To run this API Gateway:**
+
+1.  **Create the directory structure:**
+    ```bash
+    mkdir -p api-gateway/gateway api-gateway/config
+    ```
+2.  **Save the files:**
+    * Save the first code block as `api-gateway/main.go`.
+    * Save the second code block as `api-gateway/gateway/gateway.go`.
+    * Save the third code block as `api-gateway/gateway/router.go`.
+    * Save the fourth code block as `api-gateway/config/config.go`.
+    * Save the `go.mod` content into `api-gateway/go.mod`.
+3.  **Navigate to the `api-gateway` directory:**
+    ```bash
+    cd api-gateway
+    ```
+4.  **Initialize Go modules (if you haven't already by creating go.mod):**
+    ```bash
+    go mod init api-gateway # If you didn't create go.mod manually
+    go mod tidy
+    ```
+5.  **Run the gateway:**
+    ```bash
+    go run main.go
+    ```
+```
+You should see logs indicating the gateway and mock services are starting.
+
+**How to test:**
+
+Once running, you can open your browser or use a tool like `curl` to test the routes:
+
+* `http://localhost:8080/service-a/some/path` -> Should be forwarded to `http://localhost:8081/some/path` and show "Hello from Service A! - You've reached ServiceA at path: /some/path".
+* `http://localhost:8080/service-b/another/route` -> Should be forwarded to `http://localhost:8082/another/route` and show "Greetings from Service B! - You've reached ServiceB at path: /another/route".
+* `http://localhost:8080/service-c/specific/foo` -> Should be forwarded to `http://localhost:8083/foo` (prefix `/service-c/specific` stripped) and show "Welcome to Service C! - You've reached ServiceCSpecific at path: /foo".
+* `http://localhost:8080/service-c/general/bar` -> Should be forwarded to `http://localhost:8083/general/bar` (prefix `/service-c` stripped) and show "Welcome to Service C! - You've reached ServiceCGeneral at path: /general/bar".
+* `http://localhost:8080/nonexistent/path` -> Should return a 404 error from the gateway.
+
+This example provides a foundation. A production-ready API gateway would require many more features like authentication, rate limiting, detailed metrics, service discovery, and more robust error handli
+
+```
